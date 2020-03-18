@@ -12,38 +12,38 @@ import jetbrains.datalore.plot.config.Option.Meta.SeriesAnnotation
 import jetbrains.datalore.plot.config.Option.Meta.SeriesAnnotation.ANNOTATION
 import jetbrains.datalore.plot.config.Option.Meta.SeriesAnnotation.VARIABLE
 import jetbrains.datalore.plot.config.Option.Plot
-import jetbrains.datalore.plot.config.Option.Scale
 import jetbrains.datalore.plot.config.transform.SpecChange
 import jetbrains.datalore.plot.config.transform.SpecChangeContext
 import jetbrains.datalore.plot.config.transform.SpecSelector
 
-class DiscreteScaleFromAnnotationChange : SpecChange {
+class DiscreteVariableFromAnnotationChange : SpecChange {
     override fun apply(spec: MutableMap<String, Any>, ctx: SpecChangeContext) {
-        val annotationScales = spec
+        val data = spec.section(Plot.DATA)!!
+
+        spec
             .sections(Plot.LAYERS)!!
             .filter { it.has(DATA_META, SeriesAnnotation.TAG) && it.has(Layer.MAPPING) }
-            .flatMap(::scalesFromAnnotation)
+            .forEach { layer ->
+                val mapping = layer.section(Layer.MAPPING)!!.entries.associateBy({ it.value }, { it.key as String })
 
-        if (annotationScales.isNotEmpty()) {
-            spec.provideSections(Plot.SCALES).asMutable().addAll(annotationScales)
-        }
+                val annotatedVars = layer
+                    .sections(DATA_META, SeriesAnnotation.TAG)!!
+                    .filter { it.read(ANNOTATION) == SeriesAnnotation.DISCRETE }
+                    .mapNotNull { it.read(VARIABLE) as String? }
+
+                annotatedVars
+                    .filter { it in mapping }
+                    .forEach { variable ->
+                        val aes = mapping[variable]!!
+                        val mangledVariable = "__discrete_$variable"
+
+                        layer.write(Layer.MAPPING, aes) { mangledVariable }
+                        data.write(mangledVariable) { data.list(variable)!!.toMutableList() }
+                    }
+            }
     }
 
     companion object {
-        private fun scalesFromAnnotation(layer: Map<*, *>): List<Map<*, *>> {
-            val mapping = layer.section(Layer.MAPPING)!!.entries.associateBy({ it.value }, { it.key as String })
-
-            return layer.sections(DATA_META, SeriesAnnotation.TAG)!!
-                .filter { it.read(ANNOTATION) == SeriesAnnotation.DISCRETE }
-                .mapNotNull { it.read(VARIABLE).run(mapping::get) }
-                .map { aes ->
-                    mutableMapOf<String, Any>(
-                        Scale.AES to aes,
-                        Scale.DISCRETE_DOMAIN to true
-                    )
-                }
-        }
-
         internal fun specSelector(): SpecSelector {
             return SpecSelector.of()
         }
