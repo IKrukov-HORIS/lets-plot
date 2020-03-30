@@ -5,7 +5,6 @@
 
 package jetbrains.datalore.plot.base.stat
 
-import jetbrains.datalore.plot.base.interact.HitShape
 import jetbrains.datalore.plot.base.stat.math3.ForsythePolynomialGenerator
 import jetbrains.datalore.plot.base.stat.math3.PolynomialFunction
 import kotlin.math.abs

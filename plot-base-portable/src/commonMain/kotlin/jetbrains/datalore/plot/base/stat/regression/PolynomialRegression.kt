@@ -17,7 +17,7 @@ import kotlin.math.sqrt
 class PolynomialRegression(xs: List<Double?>, ys: List<Double?>, confidenceLevel: Double, deg: Int) :
     RegressionEvaluator(xs, ys, confidenceLevel) {
 
-    private val p: PolynomialFunction
+    val p: PolynomialFunction
     private val n: Int
     private val meanX: Double
     private val sumXX: Double

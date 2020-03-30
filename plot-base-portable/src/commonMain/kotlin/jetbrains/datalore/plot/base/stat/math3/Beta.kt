@@ -26,8 +26,6 @@ package jetbrains.datalore.plot.base.stat.math3
 import kotlin.jvm.JvmOverloads
 import kotlin.math.exp
 import kotlin.math.ln
-
-
 /**
  * This is a utility class that provides computation methods related to the
  * Beta family of functions.
