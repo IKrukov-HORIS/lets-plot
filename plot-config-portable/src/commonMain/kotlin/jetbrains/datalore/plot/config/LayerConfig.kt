@@ -178,7 +178,12 @@ class LayerConfig(
         if (has(Option.Layer.SAMPLING))
             return SamplingConfig.create(get(Option.Layer.SAMPLING)!!)
 
-        return listOf(loessSampler() ?: geomProto.preferredSampling())
+        val s = loessSampler()
+
+        if ( s != null )
+            return listOf(s)
+
+        return listOf( geomProto.preferredSampling())
     }
 
     private fun loessSampler(): PointSampling? {
