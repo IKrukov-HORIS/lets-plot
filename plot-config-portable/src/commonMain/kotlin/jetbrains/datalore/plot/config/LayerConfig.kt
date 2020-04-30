@@ -13,11 +13,15 @@ import jetbrains.datalore.plot.base.Scale
 import jetbrains.datalore.plot.base.Stat
 import jetbrains.datalore.plot.base.data.DataFrameUtil
 import jetbrains.datalore.plot.base.data.DataFrameUtil.variables
+import jetbrains.datalore.plot.base.stat.SmoothStat
 import jetbrains.datalore.plot.builder.VarBinding
 import jetbrains.datalore.plot.builder.assemble.PosProvider
 import jetbrains.datalore.plot.builder.assemble.TypedScaleProviderMap
 import jetbrains.datalore.plot.builder.assemble.geom.DefaultAesAutoMapper
+import jetbrains.datalore.plot.builder.assemble.geom.DefaultSampling
+import jetbrains.datalore.plot.builder.sampling.PointSampling
 import jetbrains.datalore.plot.builder.sampling.Sampling
+import jetbrains.datalore.plot.builder.sampling.Samplings
 import jetbrains.datalore.plot.config.DataMetaUtil.createDataFrame
 import jetbrains.datalore.plot.config.Option.Layer.GEOM
 import jetbrains.datalore.plot.config.Option.Layer.SHOW_LEGEND
@@ -164,10 +168,30 @@ class LayerConfig(
         ownData = layerData
         myCombinedData = combinedData
 
-        mySamplings = if (myClientSide)
-            null
-        else
-            LayerConfigUtil.initSampling(this, geomProto.preferredSampling())
+        mySamplings = initSampling()
+    }
+
+    private fun initSampling(): List<Sampling>? {
+        if (myClientSide)
+            return null
+
+        if (has(Option.Layer.SAMPLING))
+            return SamplingConfig.create(get(Option.Layer.SAMPLING)!!)
+
+        return listOf(loessSampler() ?: geomProto.preferredSampling())
+    }
+
+    private fun loessSampler(): PointSampling? {
+
+        if (stat is SmoothStat) {
+            if (stat.smoothingMethod == SmoothStat.Method.LOESS
+                &&
+                combinedData.rowCount() > SmoothStat.LOESS_CRITICAL_SIZE
+            )
+                return Samplings.random(SmoothStat.LOESS_CRITICAL_SIZE, DefaultSampling.SEED)
+        }
+
+        return null
     }
 
     private fun initGroupingVarName(data: DataFrame, mappingOptions: Map<*, *>): String? {

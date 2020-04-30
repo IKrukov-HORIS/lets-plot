@@ -100,6 +100,7 @@ class SmoothStat internal constructor() : BaseStat(DEF_MAPPING) {
         private const val DEF_DISPLAY_CONFIDENCE_INTERVAL = true
         private const val DEF_SPAN = 0.5
         private const val DEF_DEG = 1
+        const val LOESS_CRITICAL_SIZE = 1_000
     }
 
 

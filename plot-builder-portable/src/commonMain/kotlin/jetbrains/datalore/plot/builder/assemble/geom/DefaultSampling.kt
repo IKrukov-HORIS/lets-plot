@@ -18,7 +18,7 @@ import jetbrains.datalore.plot.builder.sampling.Samplings.vertexDp
       image
  */
 object DefaultSampling {
-    private const val SEED = 37L
+    const val SEED = 37L
 
     val SAFETY_SAMPLING = random(200000, SEED)
 

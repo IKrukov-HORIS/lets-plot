@@ -69,10 +69,4 @@ internal object LayerConfigUtil {
         }
         return result
     }
-
-    fun initSampling(opts: OptionsAccessor, defaultSampling: Sampling): List<Sampling> {
-        return if (opts.has(SAMPLING)) {
-            SamplingConfig.create(opts[SAMPLING]!!)
-        } else listOf(defaultSampling)
-    }
 }
