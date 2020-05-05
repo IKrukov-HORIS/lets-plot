@@ -15,16 +15,17 @@ import jetbrains.datalore.plot.builder.sampling.Samplings
 
 internal object PlotSampling {
 
-    fun apply(data: DataFrame, samplings: List<Sampling>,
-              groupMapper: (Int) -> Int,
-              samplingExpressionConsumer: Consumer<String>): DataFrame {
+    fun apply(
+        data: DataFrame, samplings: List<Sampling>,
+        groupMapper: (Int) -> Int,
+        samplingExpressionConsumer: Consumer<String>
+    ): DataFrame {
 
         @Suppress("NAME_SHADOWING")
         var data = data
 
         val applied = ArrayList<Sampling>()
         for (sampling in samplings) {
-            //DataFrame data1 = applyOne(sampling, data, layerConfig);
             val data1 = applyOne(sampling, data, groupMapper)
             if (data1 != data) {
                 applied.add(sampling)

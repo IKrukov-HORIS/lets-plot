@@ -219,15 +219,26 @@ open class PlotConfigServerSide(opts: Map<String, Any>) : PlotConfig(opts) {
         val scaleProvidersMap = scaleProvidersMap
 
         for ((layerIndex, layerConfig) in layerConfigs.withIndex()) {
-
             val statCtx = ConfiguredStatContext(dataByLayer, scaleProvidersMap)
             for (tileIndex in inputDataByTileByLayer.indices) {
-                val tileLayerInputData = inputDataByTileByLayer[tileIndex][layerIndex]
+                var tileLayerInputData = inputDataByTileByLayer[tileIndex][layerIndex]
                 val varBindings = layerConfig.varBindings
                 val groupingContext = GroupingContext(
                     tileLayerInputData,
                     varBindings, layerConfig.explicitGroupingVarName, true
                 )
+
+                // Apply early sampling to layer tile data if necessary
+                tileLayerInputData =
+                    PlotSampling.apply(tileLayerInputData,
+                        layerConfig.earlySamplings!!,
+                        groupingContext.groupMapper,
+                        { message ->
+                            layerIndexAndSamplingMessage(
+                                layerIndex,
+                                createSamplingMessage(message, layerConfig)
+                            )
+                        })
 
                 val groupingContextAfterStat: GroupingContext
                 val stat = layerConfig.stat

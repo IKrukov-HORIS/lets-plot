@@ -49,6 +49,7 @@ class LayerConfig(
     val varBindings: List<VarBinding>
     val constantsMap: Map<Aes<*>, Any>
     val statKind: StatKind
+    private val myEarlySamplings: List<Sampling>?
     private val mySamplings: List<Sampling>?
     val tooltipAes: List<Aes<*>>?
 
@@ -66,6 +67,12 @@ class LayerConfig(
         get() = if (hasOwn(SHOW_LEGEND)) {
             !getBoolean(SHOW_LEGEND, true)
         } else false
+
+    val earlySamplings: List<Sampling>?
+        get() {
+            checkState(!myClientSide)
+            return myEarlySamplings
+        }
 
     val samplings: List<Sampling>?
         get() {
@@ -168,22 +175,31 @@ class LayerConfig(
         ownData = layerData
         myCombinedData = combinedData
 
-        mySamplings = initSampling()
+        myEarlySamplings = initEarlySamplings()
+
+        mySamplings = initSamplings()
     }
 
-    private fun initSampling(): List<Sampling>? {
+    private fun initEarlySamplings(): List<Sampling>? {
+        if (myClientSide)
+            return null
+
+        val s = loessSampler()
+
+        if (s != null)
+            return listOf(s)
+
+        return listOf()
+    }
+
+    private fun initSamplings(): List<Sampling>? {
         if (myClientSide)
             return null
 
         if (has(Option.Layer.SAMPLING))
             return SamplingConfig.create(get(Option.Layer.SAMPLING)!!)
 
-        val s = loessSampler()
-
-        if ( s != null )
-            return listOf(s)
-
-        return listOf( geomProto.preferredSampling())
+        return listOf(geomProto.preferredSampling())
     }
 
     private fun loessSampler(): PointSampling? {
