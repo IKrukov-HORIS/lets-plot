@@ -86,7 +86,7 @@ class CorrelationTest {
         assertEquals(cm.rowCount(), a.size.ipow(2).toInt())
 
         val v1 : List<String> = cm[Stats.VAR1] as List<String>
-        val v2 : List<String> = cm[Stats.VAR1] as List<String>
+        val v2 : List<String> = cm[Stats.VAR2] as List<String>
         val cr : List<Double> = cm.getNumeric(Stats.CORR) as List<Double>
 
         for ((v12, corr) in v1.zip(v2).zip(cr)) {
