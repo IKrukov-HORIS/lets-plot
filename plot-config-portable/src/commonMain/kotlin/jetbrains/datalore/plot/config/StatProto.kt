@@ -81,6 +81,8 @@ class StatProto {
 
             StatKind.SMOOTH -> return configureSmoothStat(options)
 
+            StatKind.CORR -> return configureCorrStat(options)
+
             StatKind.BOXPLOT -> {
                 val boxplotStat = Stats.boxplot()
                 val opts = OptionsAccessor.over(options)
@@ -174,6 +176,21 @@ class StatProto {
         return stat
     }
 
+    private fun configureCorrStat(options: Map<*, *>): Stat {
+        val stat = Stats.corr()
+
+        if (options.containsKey("method")) {
+            val method = options["method"] as String
+            stat.correlationMethod = when (method) {
+                "pearson" -> CorrelationStat.Method.PEARSON
+                else -> throw IllegalArgumentException("Unsupported correlation method: $method")
+            }
+        }
+
+        return stat
+    }
+
+
     private fun configureDensity2dStat(stat: AbstractDensity2dStat, options: Map<*, *>): Stat {
         if (options.containsKey("kernel")) {
             val method = options["kernel"] as String
@@ -252,6 +269,7 @@ class StatProto {
             DEFAULTS["density"] = createDensityDefaults()
             DEFAULTS["density2d"] = createDensity2dDefaults()
             DEFAULTS["density2df"] = createDensity2dDefaults()
+            DEFAULTS["corr"] = emptyMap()
         }
 
         private fun createBinDefaults(): Map<String, Any> {
