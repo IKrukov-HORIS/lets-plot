@@ -37,12 +37,12 @@ class DefaultAesAutoMapper constructor(
         for (aes in autoMappedAes) {
             val discrete = preferDiscreteValues(aes)
 
-            val predicate = { variable: DataFrame.Variable? ->
+            val predicate = { variable: DataFrame.Variable ->
                 if (doneVars.contains(variable)) {
                     false
                 } else {
-                    variable!!.isStat ||
-                            discrete && !data.isNumeric(variable!!) || !discrete && data.isNumeric(variable!!)
+                    variable.isStat ||
+                            discrete && !data.isNumeric(variable) || !discrete && data.isNumeric(variable)
                 }
             }
 
@@ -50,7 +50,7 @@ class DefaultAesAutoMapper constructor(
 
             if (AES_DEFAULT_LABELS.containsKey(aes)) {
                 val defaultLabels = AES_DEFAULT_LABELS.get(aes)!!
-                autoMapVar = Iterables.find(variables, { variable -> defaultLabels.contains(variable!!.name) }, null)
+                autoMapVar = variables.find(  { variable -> defaultLabels.contains(variable.name) })
             }
 
             if (autoMapVar == null && statMapping != null) {
@@ -58,7 +58,7 @@ class DefaultAesAutoMapper constructor(
             }
 
             if (autoMapVar == null || !predicate(autoMapVar)) {
-                autoMapVar = Iterables.find(variables, predicate, null)
+                autoMapVar = variables.find(predicate)
             }
 
             if (autoMapVar != null) {
