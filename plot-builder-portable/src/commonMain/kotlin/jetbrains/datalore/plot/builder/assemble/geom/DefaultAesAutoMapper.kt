@@ -10,6 +10,7 @@ import jetbrains.datalore.plot.base.Aes
 import jetbrains.datalore.plot.base.DataFrame
 import jetbrains.datalore.plot.base.GeomKind
 import jetbrains.datalore.plot.base.data.DataFrameUtil
+import jetbrains.datalore.plot.base.stat.Stats
 import jetbrains.datalore.plot.builder.assemble.AesAutoMapper
 import jetbrains.datalore.plot.builder.map.GeoPositionField.POINT_X
 import jetbrains.datalore.plot.builder.map.GeoPositionField.POINT_Y
@@ -23,7 +24,10 @@ class DefaultAesAutoMapper constructor(
     private val preferDiscreteValues: (Aes<*>) -> Boolean
 ) : AesAutoMapper {
 
-    override fun createMapping(data: DataFrame): Map<Aes<*>, DataFrame.Variable> {
+    override fun createMapping(
+        data: DataFrame,
+        statMapping: Map<Aes<*>, DataFrame.Variable>?
+    ): Map<Aes<*>, DataFrame.Variable> {
         val autoMapping = HashMap<Aes<*>, DataFrame.Variable>()
         val doneVars = HashSet<DataFrame.Variable>()
 
@@ -37,7 +41,8 @@ class DefaultAesAutoMapper constructor(
                 if (doneVars.contains(variable)) {
                     false
                 } else {
-                    discrete && !data.isNumeric(variable!!) || !discrete && data.isNumeric(variable!!)
+                    variable!!.isStat ||
+                            discrete && !data.isNumeric(variable!!) || !discrete && data.isNumeric(variable!!)
                 }
             }
 
@@ -46,6 +51,10 @@ class DefaultAesAutoMapper constructor(
             if (AES_DEFAULT_LABELS.containsKey(aes)) {
                 val defaultLabels = AES_DEFAULT_LABELS.get(aes)!!
                 autoMapVar = Iterables.find(variables, { variable -> defaultLabels.contains(variable!!.name) }, null)
+            }
+
+            if (autoMapVar == null && statMapping != null) {
+                autoMapVar = statMapping[aes]
             }
 
             if (autoMapVar == null || !predicate(autoMapVar)) {

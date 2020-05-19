@@ -9,5 +9,5 @@ import jetbrains.datalore.plot.base.Aes
 import jetbrains.datalore.plot.base.DataFrame
 
 interface AesAutoMapper {
-    fun createMapping(data: DataFrame): Map<Aes<*>, DataFrame.Variable>
+    fun createMapping(data: DataFrame, statMapping: Map<Aes<*>, DataFrame.Variable>? ): Map<Aes<*>, DataFrame.Variable>
 }

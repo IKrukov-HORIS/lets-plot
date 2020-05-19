@@ -95,6 +95,9 @@ class LayerConfig(
             combinedData = sharedData
         }
 
+        // stat
+        statKind = StatKind.safeValueOf(getString(STAT)!!)
+        stat = statProto.createStat(statKind, mergedOptions)
 
         var aesMappings: Map<Aes<*>, DataFrame.Variable>?
         if (GeoPositionsDataUtil.hasGeoPositionsData(this) && myClientSide) {
@@ -113,7 +116,7 @@ class LayerConfig(
 
         // auto-map variables if necessary
         if (aesMappings.isEmpty()) {
-            aesMappings = DefaultAesAutoMapper.forGeom(geomProto.geomKind).createMapping(combinedData)
+            aesMappings = DefaultAesAutoMapper.forGeom(geomProto.geomKind ).createMapping(combinedData, defaultMapping(stat) )
             if (!myClientSide) {
                 // store used mapping options to pass to client.
                 val autoMappingOptions = HashMap<String, Any>()
@@ -138,8 +141,6 @@ class LayerConfig(
         // grouping
         explicitGroupingVarName = initGroupingVarName(combinedData, combinedMappings)
 
-        statKind = StatKind.safeValueOf(getString(STAT)!!)
-        stat = statProto.createStat(statKind, mergedOptions)
         posProvider = LayerConfigUtil.initPositionAdjustments(
             this,
             geomProto.preferredPositionAdjustments(this)
