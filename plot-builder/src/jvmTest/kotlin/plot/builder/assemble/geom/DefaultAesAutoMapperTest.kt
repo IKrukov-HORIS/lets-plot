@@ -59,7 +59,7 @@ class DefaultAesAutoMapperTest {
         private fun getMappedLabelsForAes(vararg aes: Aes<*>): List<String> {
             val aesAutoMapper =
                 DefaultAesAutoMapper(listOf(*aes)) { false }
-            val mappings = aesAutoMapper.createMapping(jetbrains.datalore.plot.builder.assemble.geom.DefaultAesAutoMapperTest.Companion.DATA_FRAME)
+            val mappings = aesAutoMapper.createMapping(jetbrains.datalore.plot.builder.assemble.geom.DefaultAesAutoMapperTest.Companion.DATA_FRAME, null )
             return aes.map { aesItem -> mappings.getValue(aesItem).name }
         }
     }

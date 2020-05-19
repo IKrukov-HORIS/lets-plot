@@ -91,7 +91,8 @@ class PlotConfigServerSideTest {
 
             assertEquals(1, mapping.size.toLong())
             assertTrue(mapping.containsKey("x"))
-            assertEquals("__0", mapping["x"])
+//            assertEquals("__0", mapping["x"])
+            assertEquals("..x..", mapping["x"])
         }
     }
 
