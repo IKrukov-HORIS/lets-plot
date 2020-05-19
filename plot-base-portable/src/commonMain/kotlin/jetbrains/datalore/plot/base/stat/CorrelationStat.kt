@@ -25,11 +25,11 @@ class CorrelationStat : BaseStat(DEF_MAPPING) {
         val cm = correlationMatrix(data, ::correlationPearson)
         val abs: List<Double> = cm.getNumeric(Stats.CORR).map { abs(it!!) }
 
-        return cm.builder().putNumeric(Stats.ABS_VAL, abs).build()
+        return cm.builder().putNumeric(Stats.CORR_ABS, abs).build()
     }
 
     override fun consumes(): List<Aes<*>> {
-        return listOf()
+        return listOf(Aes.X, Aes.Y)
     }
 
     enum class Method {
@@ -44,7 +44,7 @@ class CorrelationStat : BaseStat(DEF_MAPPING) {
             Aes.X to Stats.VAR1,
             Aes.Y to Stats.VAR2,
             Aes.COLOR to Stats.CORR,
-            Aes.SIZE to Stats.ABS_VAL
+            Aes.SIZE to Stats.CORR_ABS
         )
 
         private val DEF_CORELATION_METHOD = Method.PEARSON
