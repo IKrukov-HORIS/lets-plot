@@ -5,6 +5,7 @@
 
 package jetbrains.datalore.plot.base.stat
 
+import jetbrains.datalore.base.numberFormat.NumberFormat
 import jetbrains.datalore.plot.base.Aes
 import jetbrains.datalore.plot.base.DataFrame
 import jetbrains.datalore.plot.base.StatContext
@@ -14,7 +15,9 @@ import kotlin.math.abs
 
 
 class CorrelationStat : BaseStat(DEF_MAPPING) {
-    var correlationMethod = DEF_CORELATION_METHOD
+    var correlationMethod = DEF_CORRELATION_METHOD
+    var precision = DEF_PRECISION
+    var type = DEF_TYPE
 
     override fun apply(data: DataFrame, statCtx: StatContext, messageConsumer: (s: String) -> Unit): DataFrame {
         if (correlationMethod != Method.PEARSON)
@@ -22,10 +25,13 @@ class CorrelationStat : BaseStat(DEF_MAPPING) {
                 "Unsupported correlation method: $correlationMethod (only pearson is currently available)"
             )
 
-        val cm = correlationMatrix(data, ::correlationPearson)
-        val abs: List<Double> = cm.getNumeric(Stats.CORR).map { abs(it!!) }
+        val cm = correlationMatrix(data, type, ::correlationPearson)
+        val vals = cm.getNumeric(Stats.CORR)
+        val abs: List<Double> = vals.map { abs(it!!) }
+        val nf = NumberFormat(".${precision}f")
+        val txt = vals.map { nf.apply(it!!) }
 
-        return cm.builder().putNumeric(Stats.CORR_ABS, abs).build()
+        return cm.builder().putNumeric(Stats.CORR_ABS, abs).putDiscrete(Stats.LABEL, txt).build()
     }
 
     override fun consumes(): List<Aes<*>> {
@@ -38,15 +44,25 @@ class CorrelationStat : BaseStat(DEF_MAPPING) {
         KENDALL
     }
 
+    enum class Type {
+        FULL,
+        UPPER,
+        LOWER
+    }
+
     companion object {
 
         private val DEF_MAPPING: Map<Aes<*>, DataFrame.Variable> = mapOf(
             Aes.X to Stats.X,
             Aes.Y to Stats.Y,
             Aes.COLOR to Stats.CORR,
-            Aes.SIZE to Stats.CORR_ABS
+            Aes.SIZE to Stats.CORR_ABS,
+            Aes.LABEL to Stats.LABEL
         )
 
-        private val DEF_CORELATION_METHOD = Method.PEARSON
+        private val DEF_CORRELATION_METHOD = Method.PEARSON
+        private val DEF_TYPE = Type.FULL
+        private const val DEF_PRECISION = 2
+
     }
 }

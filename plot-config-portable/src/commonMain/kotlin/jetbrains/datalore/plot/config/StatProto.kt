@@ -187,6 +187,18 @@ class StatProto {
             }
         }
 
+        if (options.containsKey("type")) {
+            val type = options["type"] as String
+            stat.type = when (type) {
+                "full" -> CorrelationStat.Type.FULL
+                "upper" -> CorrelationStat.Type.UPPER
+                "lower" -> CorrelationStat.Type.LOWER
+                else -> throw IllegalArgumentException("Unsupported matrix type: $type. Only 'full', 'upper' and 'lower' are supported.")
+            }
+        }
+
+        options["precision"]?.let { stat.precision = it.asInt() }
+
         return stat
     }
 

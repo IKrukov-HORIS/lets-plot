@@ -20,7 +20,11 @@ internal object CorrelationUtil {
         return corrfn(xs, ys)
     }
 
-    fun correlationMatrix(data: DataFrame, corrfn: (DoubleArray, DoubleArray) -> Double): DataFrame {
+    fun correlationMatrix(
+        data: DataFrame,
+        type: CorrelationStat.Type,
+        corrfn: (DoubleArray, DoubleArray) -> Double
+    ): DataFrame {
         val numerics = data.variables().filter { isNumeric(data, it.name) }
 
         val var1: ArrayList<String> = arrayListOf()
@@ -28,9 +32,11 @@ internal object CorrelationUtil {
         val corr: ArrayList<Double> = arrayListOf()
 
         for ((i, vx) in numerics.withIndex()) {
+
             var1.add(vx.label)
             var2.add(vx.label)
             corr.add(1.0)
+
             val xs = data.getNumeric(vx)
 
             for (j in 0 until i) {
@@ -38,13 +44,17 @@ internal object CorrelationUtil {
                 val ys = data.getNumeric(vy)
                 val c = correlation(xs, ys, corrfn)
 
-                var1.add(vx.label)
-                var2.add(vy.label)
-                corr.add(c)
+                if (type == CorrelationStat.Type.FULL || type == CorrelationStat.Type.LOWER) {
+                    var1.add(vx.label)
+                    var2.add(vy.label)
+                    corr.add(c)
+                }
 
-                var1.add(vy.label)
-                var2.add(vx.label)
-                corr.add(c)
+                if (type == CorrelationStat.Type.FULL || type == CorrelationStat.Type.UPPER) {
+                    var1.add(vy.label)
+                    var2.add(vx.label)
+                    corr.add(c)
+                }
             }
         }
 
