@@ -49,8 +49,8 @@ internal object CorrelationUtil {
         }
 
         return DataFrame.Builder()
-            .putDiscrete(Stats.VAR1, var1)
-            .putDiscrete(Stats.VAR2, var2)
+            .putDiscrete(Stats.X, var1)
+            .putDiscrete(Stats.Y, var2)
             .putNumeric(Stats.CORR, corr)
             .build()
     }

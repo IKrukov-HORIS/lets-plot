@@ -13,6 +13,7 @@ import jetbrains.datalore.vis.demoUtils.SceneMapperDemoFactory
 object CorrelationStatJfx {
     @JvmStatic
     fun main(args: Array<String>) {
+
         with(CorrelationStat()) {
             @Suppress("UNCHECKED_CAST")
             val plotSpecList = plotSpecList() as List<MutableMap<String, Any>>

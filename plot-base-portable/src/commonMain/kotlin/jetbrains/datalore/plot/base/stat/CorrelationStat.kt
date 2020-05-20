@@ -41,8 +41,8 @@ class CorrelationStat : BaseStat(DEF_MAPPING) {
     companion object {
 
         private val DEF_MAPPING: Map<Aes<*>, DataFrame.Variable> = mapOf(
-            Aes.X to Stats.VAR1,
-            Aes.Y to Stats.VAR2,
+            Aes.X to Stats.X,
+            Aes.Y to Stats.Y,
             Aes.COLOR to Stats.CORR,
             Aes.SIZE to Stats.CORR_ABS
         )

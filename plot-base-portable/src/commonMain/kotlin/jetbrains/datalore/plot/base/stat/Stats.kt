@@ -28,8 +28,6 @@ object Stats {
     val UPPER = DataFrame.Variable("..upper..", STAT, "upper")
     val WIDTH = DataFrame.Variable("..width..", STAT, "width")
 
-    val VAR1 = DataFrame.Variable("..var1..", STAT, "var1")
-    val VAR2 = DataFrame.Variable("..var2..", STAT, "var2")
     val CORR = DataFrame.Variable("..corr..", STAT, "corr")
     val CORR_ABS = DataFrame.Variable("..corr_abs..", STAT, "corr_abs")
 
@@ -55,8 +53,6 @@ object Stats {
             WIDTH,
             SCALED,
             GROUP,
-            VAR1,
-            VAR2,
             CORR,
             CORR_ABS
         )

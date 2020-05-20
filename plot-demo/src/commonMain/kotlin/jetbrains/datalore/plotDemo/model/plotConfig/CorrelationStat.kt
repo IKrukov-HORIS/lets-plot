@@ -5,18 +5,68 @@
 
 package jetbrains.datalore.plotDemo.model.plotConfig
 
+import jetbrains.datalore.base.json.JsonFormatter
 import jetbrains.datalore.plot.parsePlotSpec
+import jetbrains.datalore.plotDemo.model.AutoMpg
 import jetbrains.datalore.plotDemo.model.PlotConfigDemoBase
 
 @Suppress("DuplicatedCode")
 
 class CorrelationStat : PlotConfigDemoBase() {
+
+//    private val jsonMpg : String
+//
+//    init {
+//        val mpg = AutoMpg.df
+//        jsonMpg   = JsonFormatter().formatJson(mpg)
+//    }
+
+
     fun plotSpecList(): List<Map<String, Any>> {
         return listOf(
             aesDemo(),
             noaesDemo()
         )
     }
+
+    /*
+    private fun aesDemo(): Map<String, Any> {
+        val spec = """
+{
+  "data": 
+""".trimMargin() + jsonMpg +
+""",
+  "mapping": {
+    "x": null,
+    "y": null
+  },
+  "data_meta": {},
+  "kind": "plot",
+  "scales": [],
+  "layers": [
+    {
+      "geom": "point",
+      "stat": "corr",
+      "data": null,
+      "mapping": {
+        "x": "..var1..",
+        "y": "..var2.."
+      },
+      "position": null,
+      "show_legend": null,
+      "data_meta": {},
+      "sampling": null,
+      "animation": null,
+      "map_join": null
+    }
+  ]
+}
+""".trimMargin()
+
+        return parsePlotSpec(spec)
+    }
+    */
+
 
     private fun aesDemo(): Map<String, Any> {
         val spec = """
@@ -1216,8 +1266,8 @@ class CorrelationStat : PlotConfigDemoBase() {
       "stat": "corr",
       "data": null,
       "mapping": {
-        "x": "..var1..",
-        "y": "..var2.."
+        "x": "..x..",
+        "y": null
       },
       "position": null,
       "show_legend": null,

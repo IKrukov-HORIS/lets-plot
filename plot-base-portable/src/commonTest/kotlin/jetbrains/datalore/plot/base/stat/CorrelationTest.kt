@@ -7,7 +7,6 @@ package jetbrains.datalore.plot.base.stat
 
 import jetbrains.datalore.base.math.ipow
 import jetbrains.datalore.plot.base.DataFrame
-import jetbrains.datalore.plot.base.data.DataFrameUtil.findVariableOrFail
 import jetbrains.datalore.plot.base.stat.CorrelationUtil.correlation
 import jetbrains.datalore.plot.base.stat.CorrelationUtil.correlationMatrix
 import jetbrains.datalore.plot.base.stat.math3.correlationPearson
@@ -85,8 +84,8 @@ class CorrelationTest {
 
         assertEquals(cm.rowCount(), a.size.ipow(2).toInt())
 
-        val v1 : List<String> = cm[Stats.VAR1] as List<String>
-        val v2 : List<String> = cm[Stats.VAR2] as List<String>
+        val v1 : List<String> = cm[Stats.X] as List<String>
+        val v2 : List<String> = cm[Stats.Y] as List<String>
         val cr : List<Double> = cm.getNumeric(Stats.CORR) as List<Double>
 
         for ((v12, corr) in v1.zip(v2).zip(cr)) {

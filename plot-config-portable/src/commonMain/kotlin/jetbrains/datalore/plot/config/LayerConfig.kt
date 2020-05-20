@@ -13,11 +13,9 @@ import jetbrains.datalore.plot.base.Scale
 import jetbrains.datalore.plot.base.Stat
 import jetbrains.datalore.plot.base.data.DataFrameUtil
 import jetbrains.datalore.plot.base.data.DataFrameUtil.variables
-import jetbrains.datalore.plot.base.stat.Stats.defaultMapping
 import jetbrains.datalore.plot.builder.VarBinding
 import jetbrains.datalore.plot.builder.assemble.PosProvider
 import jetbrains.datalore.plot.builder.assemble.TypedScaleProviderMap
-import jetbrains.datalore.plot.builder.assemble.geom.DefaultAesAutoMapper
 import jetbrains.datalore.plot.builder.sampling.Sampling
 import jetbrains.datalore.plot.config.DataMetaUtil.createDataFrame
 import jetbrains.datalore.plot.config.Option.Layer.GEOM
@@ -112,21 +110,6 @@ class LayerConfig(
             aesMappings = dataAndMapping.second
         } else {
             aesMappings = ConfigUtil.createAesMapping(combinedData, combinedMappings)
-        }
-
-        // auto-map variables if necessary
-        if (aesMappings.isEmpty()) {
-            aesMappings = DefaultAesAutoMapper.forGeom(geomProto.geomKind ).createMapping(combinedData, defaultMapping(stat) )
-            if (!myClientSide) {
-                // store used mapping options to pass to client.
-                val autoMappingOptions = HashMap<String, Any>()
-                for (aes in aesMappings.keys) {
-                    val option = Option.Mapping.toOption(aes)
-                    val variable = aesMappings[aes]!!.name
-                    autoMappingOptions[option] = variable
-                }
-                update(MAPPING, autoMappingOptions)
-            }
         }
 
         // exclude constant aes from mapping
