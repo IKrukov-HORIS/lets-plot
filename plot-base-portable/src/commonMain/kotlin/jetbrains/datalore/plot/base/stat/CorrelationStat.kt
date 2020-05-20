@@ -29,7 +29,7 @@ class CorrelationStat : BaseStat(DEF_MAPPING) {
     }
 
     override fun consumes(): List<Aes<*>> {
-        return listOf(Aes.X, Aes.Y)
+        return listOf()
     }
 
     enum class Method {
