@@ -174,7 +174,7 @@ class DropUnusedDataTest {
         TestUtil.checkOptionsClientSide(opts, 1)
 
         assertEmptyPlotData(opts)
-        checkSingleLayerData(opts, 1, mapOf("x" to 4))
+        checkSingleLayerData(opts, 0, mapOf())
     }
 
     @Test
