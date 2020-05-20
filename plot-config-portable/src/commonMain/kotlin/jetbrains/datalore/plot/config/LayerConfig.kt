@@ -93,9 +93,6 @@ class LayerConfig(
             combinedData = sharedData
         }
 
-        // stat
-        statKind = StatKind.safeValueOf(getString(STAT)!!)
-        stat = statProto.createStat(statKind, mergedOptions)
 
         var aesMappings: Map<Aes<*>, DataFrame.Variable>?
         if (GeoPositionsDataUtil.hasGeoPositionsData(this) && myClientSide) {
@@ -124,6 +121,8 @@ class LayerConfig(
         // grouping
         explicitGroupingVarName = initGroupingVarName(combinedData, combinedMappings)
 
+        statKind = StatKind.safeValueOf(getString(STAT)!!)
+        stat = statProto.createStat(statKind, mergedOptions)
         posProvider = LayerConfigUtil.initPositionAdjustments(
             this,
             geomProto.preferredPositionAdjustments(this)
