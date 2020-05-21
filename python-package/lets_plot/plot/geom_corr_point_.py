@@ -18,5 +18,5 @@ def geom_corr_point(mapping=None, data=None, position=None, show_legend=None, an
                       show_legend=show_legend,
                       animation=animation,
                       **other_args) + \
-           scale_color_continuous(name='Correlation', low='dark_blue', high='red') + scale_size(name='Abs. corr') + \
+           scale_color_continuous(name='Correlation', low='dark_blue', high='red') + scale_size(name='') + \
            theme(axis_title=element_blank()) + coord_fixed()
