@@ -30,7 +30,6 @@ object Stats {
 
     val CORR = DataFrame.Variable("..corr..", STAT, "corr")
     val CORR_ABS = DataFrame.Variable("..corr_abs..", STAT, "corr_abs")
-    val LABEL = DataFrame.Variable("..label..", STAT, "label")
 
     val SCALED = DataFrame.Variable("..scaled..", STAT, "scaled")
 
@@ -55,8 +54,7 @@ object Stats {
             SCALED,
             GROUP,
             CORR,
-            CORR_ABS,
-            LABEL
+            CORR_ABS
         )
 
         val result = HashMap<String, DataFrame.Variable>()

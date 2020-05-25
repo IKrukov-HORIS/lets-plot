@@ -1262,7 +1262,7 @@ class CorrelationStat : PlotConfigDemoBase() {
   "scales": [],
   "layers": [
     {
-      "geom": "point",
+      "geom": "text",
       "stat": "corr",
       "data": null,
       "mapping": {

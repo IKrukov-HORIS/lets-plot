@@ -39,6 +39,12 @@ object DemoModelA {
         circle.fillColor().set(Color.LIGHT_PINK)
         svgRoot.children().add(circle)
 
+        val ellipse = SvgEllipseElement(300.0, 200.0, 50.0, 10.0 )
+        ellipse.fillColor().set(Color.DARK_BLUE)
+        ellipse.transform().set(SvgTransformBuilder().rotate(-45.0, 300.0, 200.0).build())
+        svgRoot.children().add(ellipse)
+
+
         val rect = SvgRectElement(160.0, 250.0, 80.0, 50.0)
         rect.fillColor().set(Color.VERY_LIGHT_YELLOW)
         rect.strokeColor().set(Color.GRAY)

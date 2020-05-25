@@ -28,10 +28,9 @@ class CorrelationStat : BaseStat(DEF_MAPPING) {
         val cm = correlationMatrix(data, type, ::correlationPearson)
         val vals = cm.getNumeric(Stats.CORR)
         val abs: List<Double> = vals.map { abs(it!!) }
-        val nf = NumberFormat(".${precision}f")
-        val txt = vals.map { nf.apply(it!!) }
+//        val nf = NumberFormat(".${precision}f")
 
-        return cm.builder().putNumeric(Stats.CORR_ABS, abs).putDiscrete(Stats.LABEL, txt).build()
+        return cm.builder().putNumeric(Stats.CORR_ABS, abs).build()
     }
 
     override fun consumes(): List<Aes<*>> {
@@ -57,7 +56,7 @@ class CorrelationStat : BaseStat(DEF_MAPPING) {
             Aes.Y to Stats.Y,
             Aes.COLOR to Stats.CORR,
             Aes.SIZE to Stats.CORR_ABS,
-            Aes.LABEL to Stats.LABEL
+            Aes.LABEL to Stats.CORR
         )
 
         private val DEF_CORRELATION_METHOD = Method.PEARSON
