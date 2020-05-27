@@ -99,6 +99,7 @@ object Option {
         const val SHOW_LEGEND = "show_legend"
         const val TOOLTIP = "tooltip"
         const val MAP_JOIN = "map_join"
+        const val NUM_FORMAT = "num_format"
     }
 
     object Geom {
