@@ -41,8 +41,7 @@ class TextGeom : GeomBase() {
             val text = toString(p.label())
             if (SeriesUtil.allFinite(x, y) && !Strings.isNullOrEmpty(text)) {
                 val label = TextLabel(text)
-                val sizeUnitRatio = getSizeUnitRatio(ctx, aesthetics)
-                GeomHelper.decorate(label, p, sizeUnitRatio)
+                GeomHelper.decorate(label, p, getSizeUnitRatio(ctx, aesthetics))
 
                 val loc = helper.toClient(x, y, p)
                 label.moveTo(loc)
