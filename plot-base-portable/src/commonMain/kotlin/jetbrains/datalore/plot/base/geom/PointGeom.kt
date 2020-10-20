@@ -73,16 +73,15 @@ open class PointGeom : GeomBase() {
 
         sizeUnit?.let { sizeUnitValue ->
             val pointSize = p.size() ?: return 1.0
-            val shape = p.shape()!!
-            val size = shape.size(p)
+            val shapeSize = p.shape()?.size(p) ?: error("Shape should be set")
 
-            if (size == 0.0) {
+            if (shapeSize == 0.0) {
                 return 1.0
             }
 
             val unitRes = getUnitResBySizeUnit(ctx, sizeUnitValue)
 
-            return unitRes * pointSize / size
+            return unitRes * pointSize / shapeSize
         }
 
         return 1.0
