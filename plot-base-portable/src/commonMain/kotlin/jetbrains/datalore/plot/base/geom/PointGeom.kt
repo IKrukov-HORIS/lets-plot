@@ -25,7 +25,6 @@ import jetbrains.datalore.plot.base.render.point.PointShapeSvg
 import jetbrains.datalore.plot.base.render.point.TinyPointShape
 import jetbrains.datalore.plot.common.data.SeriesUtil
 import jetbrains.datalore.vis.svg.slim.SvgSlimElements
-import kotlin.math.max
 
 open class PointGeom : GeomBase() {
 
