@@ -261,7 +261,7 @@ open class GeomHelper(private val myPos: PositionAdjustment, coord: CoordinateSy
             return when (sizeUnitName.toLowerCase()) {
                 "x" -> Aes.X
                 "y" -> Aes.Y
-                else -> error("Size unit value must be either 'x' or 'y'")
+                else -> error("Size unit value must be either 'x' or 'y', but was $sizeUnitName.")
             }
         }
 
