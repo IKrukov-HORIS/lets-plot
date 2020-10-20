@@ -73,7 +73,7 @@ open class PointGeom : GeomBase() {
     // TODO: Correlation matrix specific. Need universal implementation size_unit for various geoms
     private fun getSizeUnitRatio(ctx: GeomContext, aes: Aesthetics): Double {
         sizeUnit?.let { sizeUnitValue ->
-            val maxShapeSize = aes.dataPoints().map { pt -> pt.shape()!!.size(pt) }.max() ?: 0.0
+            val maxShapeSize = aes.dataPoints().map { p -> p.shape()!!.size(p) }.max() ?: 0.0
 
             if (maxShapeSize == 0.0) {
                 return 1.0
