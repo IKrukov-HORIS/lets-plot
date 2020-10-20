@@ -73,7 +73,7 @@ open class PointGeom : GeomBase() {
 
         sizeUnit?.let { sizeUnitValue ->
             val pointSize = p.size() ?: return 1.0
-            val shapeSize = p.shape()?.size(p) ?: error("Shape should be set")
+            val shapeSize = p.shape()?.size(p)!!
 
             if (shapeSize == 0.0) {
                 return 1.0
