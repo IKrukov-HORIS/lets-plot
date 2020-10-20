@@ -25,6 +25,7 @@ import jetbrains.datalore.plot.base.render.point.PointShapeSvg
 import jetbrains.datalore.plot.base.render.point.TinyPointShape
 import jetbrains.datalore.plot.common.data.SeriesUtil
 import jetbrains.datalore.vis.svg.slim.SvgSlimElements
+import kotlin.math.max
 
 open class PointGeom : GeomBase() {
 
@@ -46,6 +47,8 @@ open class PointGeom : GeomBase() {
 
         val count = aesthetics.dataPointCount()
         val slimGroup = SvgSlimElements.g(count)
+        val sizeUnitRatio = getSizeUnitRatio(ctx, aesthetics)
+
         for (i in 0 until count) {
             val p = aesthetics.dataPointAt(i)
             val x = p.x()
@@ -55,7 +58,6 @@ open class PointGeom : GeomBase() {
                 val location = helper.toClient(DoubleVector(x!!, y!!), p)
 
                 val shape = p.shape()!!
-                val sizeUnitRatio = getSizeUnitRatio(ctx, p)
 
                 targetCollector.addPoint(
                     i, location, sizeUnitRatio * shape.size(p) / 2,
@@ -68,20 +70,29 @@ open class PointGeom : GeomBase() {
         root.add(wrap(slimGroup))
     }
 
-    // TODO: Correlation matrix specific. Need universal implementation size_unit for various geoms
-    private fun getSizeUnitRatio(ctx: GeomContext, p: DataPointAesthetics): Double {
-
-        sizeUnit?.let { sizeUnitValue ->
-            val pointSize = p.size() ?: return 1.0
+    private fun getMaxShapeSize(aesthetics: Aesthetics) : Double {
+        val count = aesthetics.dataPointCount()
+        var res = 0.0
+        for (i in 0 until count) {
+            val p = aesthetics.dataPointAt(i)
             val shapeSize = p.shape()?.size(p)!!
+            res = max( res, shapeSize)
+        }
 
-            if (shapeSize == 0.0) {
+        return res
+    }
+
+    // TODO: Correlation matrix specific. Need universal implementation size_unit for various geoms
+    private fun getSizeUnitRatio(ctx: GeomContext, aesthetics: Aesthetics): Double {
+        sizeUnit?.let { sizeUnitValue ->
+            val maxShapeSize = getMaxShapeSize(aesthetics)
+
+            if (maxShapeSize == 0.0) {
                 return 1.0
             }
 
             val unitRes = getUnitResBySizeUnit(ctx, sizeUnitValue)
-
-            return unitRes * pointSize / shapeSize
+            return unitRes  / maxShapeSize
         }
 
         return 1.0
