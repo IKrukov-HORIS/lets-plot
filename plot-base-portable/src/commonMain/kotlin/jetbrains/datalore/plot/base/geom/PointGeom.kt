@@ -70,29 +70,17 @@ open class PointGeom : GeomBase() {
         root.add(wrap(slimGroup))
     }
 
-    private fun getMaxShapeSize(aesthetics: Aesthetics) : Double {
-        val count = aesthetics.dataPointCount()
-        var res = 0.0
-        for (i in 0 until count) {
-            val p = aesthetics.dataPointAt(i)
-            val shapeSize = p.shape()?.size(p)!!
-            res = max( res, shapeSize)
-        }
-
-        return res
-    }
-
     // TODO: Correlation matrix specific. Need universal implementation size_unit for various geoms
-    private fun getSizeUnitRatio(ctx: GeomContext, aesthetics: Aesthetics): Double {
+    private fun getSizeUnitRatio(ctx: GeomContext, aes: Aesthetics): Double {
         sizeUnit?.let { sizeUnitValue ->
-            val maxShapeSize = getMaxShapeSize(aesthetics)
+            val maxShapeSize = aes.dataPoints().map { pt -> pt.shape()!!.size(pt) }.max() ?: 0.0
 
             if (maxShapeSize == 0.0) {
                 return 1.0
             }
 
             val unitRes = getUnitResBySizeUnit(ctx, sizeUnitValue)
-            return unitRes  / maxShapeSize
+            return unitRes / maxShapeSize
         }
 
         return 1.0
