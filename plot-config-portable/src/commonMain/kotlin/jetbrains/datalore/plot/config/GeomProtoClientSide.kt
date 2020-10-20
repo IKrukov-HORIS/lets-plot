@@ -23,7 +23,6 @@ import jetbrains.datalore.plot.config.Option.Geom.Text
 import jetbrains.datalore.plot.config.Option.Geom.PointRange
 import jetbrains.datalore.plot.config.Option.Geom.Segment
 import jetbrains.datalore.plot.config.Option.Geom.Step
-import jetbrains.datalore.plot.config.Option.SizeUnit
 
 
 class GeomProtoClientSide(geomKind: GeomKind) : GeomProto(geomKind) {
@@ -122,7 +121,7 @@ class GeomProtoClientSide(geomKind: GeomKind) : GeomProto(geomKind) {
                     geom.animation = opts[Point.ANIMATION]
                 }
 
-                geom.sizeUnit = getSizeUnitValue(opts)
+                geom.sizeUnit = opts.getString(Point.SIZE_UNIT)?.toLowerCase()
                 geom
             }
 
@@ -153,7 +152,7 @@ class GeomProtoClientSide(geomKind: GeomKind) : GeomProto(geomKind) {
                     }
                 }
 
-                geom.sizeUnit = getSizeUnitValue(opts)
+                geom.sizeUnit = opts.getString(Point.SIZE_UNIT)?.toLowerCase()
 
                 geom
             }
@@ -177,17 +176,6 @@ class GeomProtoClientSide(geomKind: GeomKind) : GeomProto(geomKind) {
                 return PROVIDER[geomKind]!!
             }
         }
-    }
-
-    private fun getSizeUnitValue(opts: OptionsAccessor): String? {
-        val sizeUnit = opts.getString(SizeUnit.SIZE_UNIT)?.toLowerCase()
-        sizeUnit?.let {
-            if (it != "x" && it != "y") {
-                throw IllegalArgumentException("Expected: size_unit = 'x' or size_unit = 'y'")
-            }
-        }
-
-        return sizeUnit
     }
 
     private companion object {
