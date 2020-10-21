@@ -60,7 +60,7 @@ class corr_plot_builder:
                                                   breaks=[-1.0, -0.5, 0.0, 0.5, 1.0],
                                                   limits=[-1.0, 1.0])
 
-    def points(self, type=None, fill_diagonal=None, format=None, **other_args):
+    def points(self, type=None, fill_diagonal=None, format=None):
         """
         Method defines correlation matrix layer drawn by points to the plot.
 
@@ -81,12 +81,11 @@ class corr_plot_builder:
 
         self._points_layer = geom_point(stat='corr', show_legend=self._show_legend, size_unit='x',
                                         tooltips=self._tooltip_spec(format),
-                                        type=self._get_type(type), fill_diagonal=fill_diagonal,
-                                        **other_args)
+                                        type=self._get_type(type), fill_diagonal=fill_diagonal)
 
         return self
 
-    def labels(self, type=None, fill_diagonal=None, format=None, map_size=False, **other_args):
+    def labels(self, type=None, fill_diagonal=None, format=None, map_size=False, color=None):
         """
         Method defines correlation matrix layer drawn with geom_text to the plot.
 
@@ -99,32 +98,34 @@ class corr_plot_builder:
         format : string
             The format to apply to the field. The format contains a number format (1.f) or a string template ({.1f}).
             Default - '.2f'.
-        map_size - Boolean
+        map_size : Boolean
             If True, then absolute value of correlation is mapped to text size. Default - False.
-
+        color: string
+            Set text color.
         Returns
         -------
             self
         """
-        other_args['label_format'] = self._get_format(format)
 
-        if 'size' not in other_args:
-            other_args['size_unit'] = 'x'
+        other_args = {}
 
-            if not map_size:
-                other_args['size'] = 1
+        if not map_size:
+            other_args['size'] = 1
 
-        if 'color' not in other_args:
+        if color:
+            other_args['color'] = color
+        else:
             other_args['color'] = self._text_color
 
         self._labels_layer = geom_text(stat='corr', show_legend=self._show_legend,
                                        tooltips=self._tooltip_spec(format),
                                        type=self._get_type(type), fill_diagonal=fill_diagonal,
-                                       na_value='', **other_args)
+                                       na_value='', label_format=self._get_format(format),
+                                       size_unit = 'x', **other_args)
 
         return self
 
-    def tiles(self, type=None, fill_diagonal=None, format=None, **other_args):
+    def tiles(self, type=None, fill_diagonal=None, format=None):
         """
         Method defines correlation matrix layer drawn as square tiles to the plot.
 
@@ -148,7 +149,7 @@ class corr_plot_builder:
         self._tiles_layer = geom_point(stat='corr', show_legend=self._show_legend, size_unit='x',
                                        tooltips=self._tooltip_spec(format),
                                        type=self._get_type(type), fill_diagonal=fill_diagonal,
-                                       size=1.0, shape=15, **other_args)
+                                       size=1.0, shape=15)
 
         return self
 
