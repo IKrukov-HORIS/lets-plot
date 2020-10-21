@@ -152,7 +152,7 @@ class GeomProtoClientSide(geomKind: GeomKind) : GeomProto(geomKind) {
                     }
                 }
 
-                geom.sizeUnit = opts.getString(Point.SIZE_UNIT)?.toLowerCase()
+                geom.sizeUnit = opts.getString(Text.SIZE_UNIT)?.toLowerCase()
 
                 geom
             }
