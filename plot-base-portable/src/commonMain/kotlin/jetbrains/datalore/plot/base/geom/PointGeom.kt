@@ -7,7 +7,6 @@ package jetbrains.datalore.plot.base.geom
 
 import jetbrains.datalore.base.geometry.DoubleVector
 import jetbrains.datalore.base.values.Color
-import jetbrains.datalore.plot.base.Aes
 import jetbrains.datalore.plot.base.Aesthetics
 import jetbrains.datalore.plot.base.CoordinateSystem
 import jetbrains.datalore.plot.base.DataPointAesthetics
@@ -23,7 +22,6 @@ import jetbrains.datalore.plot.base.interact.GeomTargetCollector.TooltipParams.C
 import jetbrains.datalore.plot.base.render.LegendKeyElementFactory
 import jetbrains.datalore.plot.base.render.SvgRoot
 import jetbrains.datalore.plot.base.render.point.NamedShape
-import jetbrains.datalore.plot.base.render.point.PointShape
 import jetbrains.datalore.plot.base.render.point.PointShapeSvg
 import jetbrains.datalore.plot.base.render.point.TinyPointShape
 import jetbrains.datalore.plot.common.data.SeriesUtil

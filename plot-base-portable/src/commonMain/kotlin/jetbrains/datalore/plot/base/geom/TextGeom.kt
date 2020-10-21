@@ -6,7 +6,6 @@
 package jetbrains.datalore.plot.base.geom
 
 import jetbrains.datalore.base.gcommon.base.Strings
-import jetbrains.datalore.plot.base.Aes
 import jetbrains.datalore.plot.base.Aesthetics
 import jetbrains.datalore.plot.base.CoordinateSystem
 import jetbrains.datalore.plot.base.GeomContext
@@ -45,7 +44,7 @@ class TextGeom : GeomBase() {
             val text = toString(p.label())
             if (SeriesUtil.allFinite(x, y) && !Strings.isNullOrEmpty(text)) {
                 val label = TextLabel(text)
-                GeomHelper.decorate(label, p, getSizeUnitRatio(ctx, aesthetics))
+                GeomHelper.decorate(label, p, getSizeUnitRatio(ctx))
 
                 val loc = helper.toClient(x, y, p)
                 label.moveTo(loc)
@@ -63,8 +62,7 @@ class TextGeom : GeomBase() {
         }
     }
 
-    // TODO: Correlation matrix specific. Need universal implementation size_unit for various geoms
-    private fun getSizeUnitRatio(ctx: GeomContext, aesthetics: Aesthetics): Double {
+    private fun getSizeUnitRatio(ctx: GeomContext): Double {
         fun estimateMaxTextWidth(fontSize: Double): Double {
             val testVal = -9.40
             val textWidthNorm = 0.6
@@ -74,16 +72,10 @@ class TextGeom : GeomBase() {
         }
 
         sizeUnit?.let { sizeUnitValue ->
-            val fontSize = AesScaling.textSize(aesthetics.range(Aes.SIZE)?.upperEnd!!)
-            val maxTextWidth = estimateMaxTextWidth(fontSize)
-
-            if (maxTextWidth == 0.0) {
-                return 1.0
-            }
-
             val unitRes = GeomHelper.getUnitResBySizeUnit(ctx, sizeUnitValue)
+            val unitTextWidth = estimateMaxTextWidth(AesScaling.textSize(1.0))
 
-            return unitRes / maxTextWidth
+            return unitRes / unitTextWidth
         }
 
         return 1.0
