@@ -7,11 +7,13 @@ package jetbrains.datalore.plot.base.geom
 
 import jetbrains.datalore.base.geometry.DoubleVector
 import jetbrains.datalore.base.values.Color
+import jetbrains.datalore.plot.base.Aes
 import jetbrains.datalore.plot.base.Aesthetics
 import jetbrains.datalore.plot.base.CoordinateSystem
 import jetbrains.datalore.plot.base.DataPointAesthetics
 import jetbrains.datalore.plot.base.GeomContext
 import jetbrains.datalore.plot.base.PositionAdjustment
+import jetbrains.datalore.plot.base.aes.AesScaling
 import jetbrains.datalore.plot.base.aes.AestheticsUtil
 import jetbrains.datalore.plot.base.geom.util.GeomHelper
 import jetbrains.datalore.plot.base.geom.util.GeomHelper.Companion.getUnitResBySizeUnit
@@ -21,6 +23,7 @@ import jetbrains.datalore.plot.base.interact.GeomTargetCollector.TooltipParams.C
 import jetbrains.datalore.plot.base.render.LegendKeyElementFactory
 import jetbrains.datalore.plot.base.render.SvgRoot
 import jetbrains.datalore.plot.base.render.point.NamedShape
+import jetbrains.datalore.plot.base.render.point.PointShape
 import jetbrains.datalore.plot.base.render.point.PointShapeSvg
 import jetbrains.datalore.plot.base.render.point.TinyPointShape
 import jetbrains.datalore.plot.common.data.SeriesUtil
@@ -46,7 +49,7 @@ open class PointGeom : GeomBase() {
 
         val count = aesthetics.dataPointCount()
         val slimGroup = SvgSlimElements.g(count)
-        val sizeUnitRatio = getSizeUnitRatio(ctx, aesthetics)
+        val sizeUnitRatio = getSizeUnitRatio(ctx)
 
         for (i in 0 until count) {
             val p = aesthetics.dataPointAt(i)
@@ -69,17 +72,11 @@ open class PointGeom : GeomBase() {
         root.add(wrap(slimGroup))
     }
 
-    // TODO: Correlation matrix specific. Need universal implementation size_unit for various geoms
-    private fun getSizeUnitRatio(ctx: GeomContext, aes: Aesthetics): Double {
+    private fun getSizeUnitRatio(ctx: GeomContext): Double {
         sizeUnit?.let { sizeUnitValue ->
-            val maxShapeSize = aes.dataPoints().map { p -> p.shape()!!.size(p) }.max() ?: 0.0
-
-            if (maxShapeSize == 0.0) {
-                return 1.0
-            }
-
             val unitRes = getUnitResBySizeUnit(ctx, sizeUnitValue)
-            return unitRes / maxShapeSize
+            val unitShapeSize = AesScaling.circleDiameter(1.0)
+            return unitRes / unitShapeSize
         }
 
         return 1.0
