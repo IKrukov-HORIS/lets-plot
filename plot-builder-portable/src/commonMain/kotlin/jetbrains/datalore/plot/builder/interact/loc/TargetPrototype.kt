@@ -13,12 +13,14 @@ import jetbrains.datalore.plot.base.interact.HitShape
 import jetbrains.datalore.plot.base.interact.HitShape.Kind.*
 import jetbrains.datalore.plot.base.interact.TipLayoutHint
 import jetbrains.datalore.plot.base.interact.TipLayoutHint.Kind.*
+import jetbrains.datalore.plot.base.interact.TipLayoutHint.PositionOffsetXY
 
 class TargetPrototype(
     internal val hitShape: HitShape,
     internal val indexMapper: (Int) -> Int,
     private val tooltipParams: TooltipParams,
-    private val tooltipKind: TipLayoutHint.Kind
+    private val tooltipKind: TipLayoutHint.Kind,
+    internal val tooltipOffset: PositionOffsetXY = PositionOffsetXY.TOP_CENTER
 ) {
 
     internal fun createGeomTarget(hitCoord: DoubleVector, hitIndex: Int): GeomTarget {

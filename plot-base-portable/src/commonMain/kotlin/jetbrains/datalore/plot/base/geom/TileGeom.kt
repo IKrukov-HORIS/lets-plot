@@ -42,7 +42,8 @@ open class TileGeom : GeomBase() {
                     p
                 )
             },
-            TipLayoutHint.Kind.CURSOR_TOOLTIP
+            TipLayoutHint.Kind.CURSOR_TOOLTIP,
+            TipLayoutHint.PositionOffsetXY.CENTER_CENTER
         )
             .collectTo(ctx.targetCollector)
     }

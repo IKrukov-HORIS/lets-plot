@@ -160,11 +160,11 @@ internal class LayerTargetLocator(
 
     private fun processRect(coord: DoubleVector, target: Target, resultCollector: Collector<GeomTarget>) {
         if (myTargetDetector.checkRect(coord, target.rectProjection, resultCollector.closestPointChecker)) {
-
             val rect = target.prototype.hitShape.rect
+            val offset = target.prototype.tooltipOffset.offset(rect)
             resultCollector.collect(
                     target.prototype.createGeomTarget(
-                            rect.origin.add(DoubleVector(rect.width / 2, 0.0)),
+                            rect.origin.add(offset),
                             getKeyForSingleObjectGeometry(target.prototype)
                     )
             )

@@ -5,6 +5,7 @@
 
 package jetbrains.datalore.plot.base.interact
 
+import jetbrains.datalore.base.geometry.DoubleRectangle
 import jetbrains.datalore.base.geometry.DoubleVector
 import jetbrains.datalore.base.values.Color
 
@@ -36,6 +37,40 @@ open class TipLayoutHint(
         Y_AXIS_TOOLTIP
     }
 
+    enum class PositionOffsetKind {
+        START, MIDDLE, END
+    }
+
+    class PositionOffset( val kind: PositionOffsetKind ) {
+        fun offset( d : Double): Double {
+            return when (kind) {
+                PositionOffsetKind.START -> 0.0
+                PositionOffsetKind.MIDDLE -> d / 2.0
+                PositionOffsetKind.END -> d
+            }
+        }
+    }
+
+    class PositionOffsetXY (private val xOffset: PositionOffset, private val yOffset: PositionOffset) {
+
+        constructor ( xOffsetKind: PositionOffsetKind, yOffsetKind: PositionOffsetKind )
+                : this (PositionOffset(xOffsetKind), PositionOffset(yOffsetKind))
+
+        fun offset( rect: DoubleRectangle ) = DoubleVector(xOffset.offset(rect.width), yOffset.offset(rect.height))
+
+        companion object {
+            val TOP_LEFT = PositionOffsetXY( PositionOffsetKind.START, PositionOffsetKind.START)
+            val CENTER_LEFT = PositionOffsetXY( PositionOffsetKind.START, PositionOffsetKind.MIDDLE)
+            val BOTTOM_LEFT = PositionOffsetXY( PositionOffsetKind.START, PositionOffsetKind.END)
+            val TOP_CENTER = PositionOffsetXY( PositionOffsetKind.MIDDLE, PositionOffsetKind.START)
+            val CENTER_CENTER = PositionOffsetXY( PositionOffsetKind.MIDDLE, PositionOffsetKind.MIDDLE)
+            val BOTTOM_CENTER = PositionOffsetXY( PositionOffsetKind.MIDDLE, PositionOffsetKind.END)
+            val TOP_RIGHT = PositionOffsetXY( PositionOffsetKind.END, PositionOffsetKind.START)
+            val CENTER_RIGHT = PositionOffsetXY( PositionOffsetKind.END, PositionOffsetKind.MIDDLE)
+            val BOTTOM_RIGHT = PositionOffsetXY( PositionOffsetKind.END, PositionOffsetKind.END)
+        }
+
+    }
 
     companion object {
 

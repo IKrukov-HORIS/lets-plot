@@ -40,14 +40,16 @@ class LayerTargetCollectorWithLocator(
         index: Int,
         rectangle: DoubleRectangle,
         tooltipParams: GeomTargetCollector.TooltipParams,
-        tooltipKind: TipLayoutHint.Kind
+        tooltipKind: TipLayoutHint.Kind,
+        tooltipOffset: TipLayoutHint.PositionOffsetXY,
     ) {
         addTarget(
             TargetPrototype(
                 HitShape.rect(rectangle),
                 { index },
                 tooltipParams,
-                tooltipKind
+                tooltipKind,
+                tooltipOffset
             )
         )
     }

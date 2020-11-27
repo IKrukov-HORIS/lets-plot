@@ -46,30 +46,28 @@ class MappingValue(
     }
 
     override fun getDataPoint(index: Int): DataPoint? {
-        return if (isAxis && !myIsContinuous) {
-            null
-        } else {
-            val originalValue = myDataAccess.getOriginalValue(aes, index)
-            val formattedValue =
-                originalValue?.let { myFormatter?.format(it) } ?: myDataAccess.getMappedData(aes, index).value
 
-            // for outliers: myDataLabel is a part of the value, but pattern format removes this part
-            val value = if (isOutlier && !myDataLabel.isNullOrEmpty() &&
-                myFormatter?.formatType != StringFormat.FormatType.STRING_FORMAT
-            ) {
-                "$myDataLabel: $formattedValue"
-            } else {
-                formattedValue
-            }
-            DataPoint(
-                label = if (isOutlier) null else myDataLabel,
-                value = value,
-                isContinuous = myIsContinuous,
-                aes = aes,
-                isAxis = isAxis,
-                isOutlier = isOutlier
-            )
+        val originalValue = myDataAccess.getOriginalValue(aes, index)
+        val formattedValue =
+            originalValue?.let { myFormatter?.format(it) } ?: myDataAccess.getMappedData(aes, index).value
+
+        // for outliers: myDataLabel is a part of the value, but pattern format removes this part
+        val value = if (isOutlier && !myDataLabel.isNullOrEmpty() &&
+            myFormatter?.formatType != StringFormat.FormatType.STRING_FORMAT
+        ) {
+            "$myDataLabel: $formattedValue"
+        } else {
+            formattedValue
         }
+
+        return DataPoint(
+            label = if (isOutlier) null else myDataLabel,
+            value = value,
+            isContinuous = myIsContinuous,
+            aes = aes,
+            isAxis = isAxis,
+            isOutlier = isOutlier
+        )
     }
 
     fun toOutlier(): MappingValue {
